@@ -1,0 +1,27 @@
+{
+    "name": "mark0916/roomz-dropbox-auth",
+    "description": "dropbox-php-sdk implementation in laravel",
+    "keywords": ["roomz dropbox auth"],
+    "homepage": "https://github.com/mark0916",
+    "authors": [
+        {
+            "name": "Mark Dingemanse",
+            "email": "dingemansemark@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "laravel/framework": "5.2.*",
+        "dropbox/dropbox-sdk": "1.1.*"
+    },
+    "autoload": {
+      "psr-4": {
+        "Roomz\\Dropbox\\": "src/"
+      }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
