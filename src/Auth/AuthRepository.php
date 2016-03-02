@@ -1,5 +1,7 @@
 <?php namespace Roomz\Dropbox\Auth;
 
+use App\User;
+
 class AuthRepository implements AuthRepositoryInterface
 {
     private $model;
@@ -9,13 +11,13 @@ class AuthRepository implements AuthRepositoryInterface
         $this->model = new AuthModel();
     }
 
-    public function boot($dummyVar)
+    public function boot(User $user, $update = true)
     {
-        $this->model->boot();
+        $this->model->boot($user, $update);
     }
 
-    public function callback()
+    public function callback(User $user)
     {
-        return $this->model->callback();
+        return $this->model->callback($user);
     }
 }

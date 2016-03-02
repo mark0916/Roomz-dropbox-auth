@@ -1,5 +1,7 @@
 <?php namespace Roomz\Dropbox\Auth;
 
+use App\User;
+
 class AuthModel implements AuthModelInterface
 {
     public function __construct()
@@ -7,8 +9,16 @@ class AuthModel implements AuthModelInterface
 
     }
 
-    public function boot()
+    public function boot(User $user, $update = true)
     {
+        if(!$update)
+        {
+            if ($this->checkToken($user))
+            {
+                return new \Dropbox\Client($user->dropboxToken, getenv('ROOMZ_DROPBOX_NAME'), 'UTF-8');
+            }
+        }
+
         $webAuth = $this->webAuth();
 
         $authUrl = $webAuth->start();
@@ -17,11 +27,14 @@ class AuthModel implements AuthModelInterface
         exit();
     }
 
-    public function callback()
+    public function callback(User $user)
     {
         $webAuth = $this->webAuth();
 
         list($accesToken) = $webAuth->finish($_GET);
+
+        $user->setAttribute('dropboxToken', $accesToken);
+        $user->save();
 
         return new \Dropbox\Client($accesToken, getenv('ROOMZ_DROPBOX_NAME'), 'UTF-8');
 
@@ -40,8 +53,8 @@ class AuthModel implements AuthModelInterface
         return new \Dropbox\WebAuth($appInfo, $appName, getenv('ROOMZ_DROPBOX_CALLBACK'), $csrfTokenStore);
     }
 
-    public function upload($dummyVar)
+    private function checkToken(User $user)
     {
-        dd($dummyVar);
+        return !is_null($user->getAttribute('dropboxToken'));
     }
 }

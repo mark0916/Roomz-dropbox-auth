@@ -1,5 +1,5 @@
 {
-    "name": "mark0916/roomz-dropbox-auth",
+    "name": "mark0916/roomz-dropbox-client",
     "description": "dropbox-php-sdk implementation in laravel",
     "keywords": ["roomz dropbox auth"],
     "homepage": "https://github.com/mark0916",

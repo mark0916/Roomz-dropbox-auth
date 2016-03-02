@@ -8,18 +8,6 @@ class RoomzDropboxServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->setupContainerBinding();
-
-        $this->setupConnection();
-    }
-
-    protected function setupConnection()
-    {
-        $config = $this->app['config'];
-
-        $config->set(
-            'roomz-dropbox',
-            $config['roomz-dropbox::auth']
-        );
     }
 
     public function setupContainerBinding()

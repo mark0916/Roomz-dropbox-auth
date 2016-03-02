@@ -13,7 +13,7 @@ composer
 "require": {
     "php": ">=5.5.9",
     "laravel/framework": "5.2.*",
-    "mark0916/roomz-dropbox-auth": "dev-master"
+    "mark0916/roomz-dropbox-client": "dev-master"
 },
 ```
 
