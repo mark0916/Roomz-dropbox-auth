@@ -2,6 +2,8 @@
 
 class ClientRepository implements ClientRepositoryInterface
 {
+    //TODO:: add comments!!!!!!
+    //TODO:: fill up the interface
     private $model;
 
     public function __construct()
@@ -11,11 +13,22 @@ class ClientRepository implements ClientRepositoryInterface
 
     public function setClient($client)
     {
-        return $this->model->setClient($client);
+        return $this->model->
+            setClient($client);
     }
 
     public function getClient()
     {
-        return $this->model->getClient();
+        return $this->model->
+            getClient();
+    }
+
+    public function uploadFile($path, $uploadedName)
+    {
+        return $this->model->
+            uploadFile(
+                $path,
+                $uploadedName
+            );
     }
 }

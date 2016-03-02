@@ -4,19 +4,24 @@ use App\User;
 
 class AuthModel implements AuthModelInterface
 {
+    //TODO:: REMOVE HARD CLASS NOTATIONS!!!!!!!!!!!!!!!!!!!!!!
+    //TODO:: Fill up the interface!!!!!!!!
     public function __construct()
     {
-
+        //...
     }
 
-    public function boot(User $user, $update = true)
+    /**
+     * Starts a oauth authentication procedure. checks first if user had a token already
+     *
+     * @param   User $user
+     * @return \Dropbox\Client
+     */
+    public function boot(User $user)
     {
-        if(!$update)
+        if ($this->checkToken($user))
         {
-            if ($this->checkToken($user))
-            {
-                return new \Dropbox\Client($user->dropboxToken, getenv('ROOMZ_DROPBOX_NAME'), 'UTF-8');
-            }
+            return new \Dropbox\Client($user->dropboxToken, getenv('ROOMZ_DROPBOX_NAME'), 'UTF-8');
         }
 
         $webAuth = $this->webAuth();
@@ -27,6 +32,29 @@ class AuthModel implements AuthModelInterface
         exit();
     }
 
+    /**
+     * Restarts a oauth authentication procedure. Should be called when token related exeptions are thrown
+     *
+     * @param   User $user
+     * @return \Dropbox\Client
+     */
+    public function reboot(User $user)
+    {
+
+        $webAuth = $this->webAuth();
+
+        $authUrl = $webAuth->start();
+
+        header('Location: ' . $authUrl);
+        exit();
+    }
+
+    /**
+     * Finalizes oauth authentication procedure. sets the aquired token on the given User
+     *
+     * @param   User $user
+     * @return \Dropbox\Client
+     */
     public function callback(User $user)
     {
         $webAuth = $this->webAuth();
@@ -40,6 +68,25 @@ class AuthModel implements AuthModelInterface
 
     }
 
+    /**
+     * getter for the dropbox api client for further use in the application.
+     * User needs to be authenticated and the exeption should be caught in the controllers
+     *
+     * @param   User $user
+     * @return \Dropbox\Client
+     * @throws \Dropbox\Exception_InvalidAccessToken
+     */
+    public function getApiClient(User $user)
+    {
+        return new \Dropbox\Client($user->dropboxToken, getenv('ROOMZ_DROPBOX_NAME'), 'UTF-8');
+    }
+
+    /**
+     * Initialises basic info used to contact the dropbox api.
+     * Uses values from the laravel envirimental file (.env)
+     *
+     * @return \Dropbox\WebAuth
+     */
     private function webAuth()
     {
         $dropboxKey    = getenv('ROOMZ_DROPBOX_KEY');
@@ -53,6 +100,11 @@ class AuthModel implements AuthModelInterface
         return new \Dropbox\WebAuth($appInfo, $appName, getenv('ROOMZ_DROPBOX_CALLBACK'), $csrfTokenStore);
     }
 
+    /**
+     * Check if the user has a token. Does not check if its a valid one tho.
+     *
+     * @return boolean
+     */
     private function checkToken(User $user)
     {
         return !is_null($user->getAttribute('dropboxToken'));
