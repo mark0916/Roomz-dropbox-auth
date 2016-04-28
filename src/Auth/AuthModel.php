@@ -1,11 +1,10 @@
 <?php namespace Roomz\Dropbox\Auth;
 
-use App\User;
-
 class AuthModel implements AuthModelInterface
 {
-    //TODO:: REMOVE HARD CLASS NOTATIONS!!!!!!!!!!!!!!!!!!!!!!
-    //TODO:: Fill up the interface!!!!!!!!
+    /**
+     * bind vars to the class
+     */
     public function __construct()
     {
         //...
@@ -17,7 +16,7 @@ class AuthModel implements AuthModelInterface
      * @param   User $user
      * @return array
      */
-    public function boot(User $user)
+    public function boot($user)
     {
         // dd($this->checkToken($user));
         if (!$this->checkToken($user))
@@ -37,7 +36,7 @@ class AuthModel implements AuthModelInterface
      * @param   User $user
      * @return \Dropbox\Client
      */
-    public function reboot(User $user)
+    public function reboot($user)
     {
 
         $webAuth = $this->webAuth();
@@ -54,7 +53,7 @@ class AuthModel implements AuthModelInterface
      * @param   User $user
      * @return User $user
      */
-    public function callback(User $user)
+    public function callback($user)
     {
         $webAuth = $this->webAuth();
 
@@ -78,7 +77,7 @@ class AuthModel implements AuthModelInterface
      * @return \Dropbox\Client
      * @throws \Dropbox\Exception_InvalidAccessToken
      */
-    public function getApiClient(User $user)
+    public function getApiClient($user)
     {
         return new \Dropbox\Client($user->dropboxToken, getenv('ROOMZ_DROPBOX_NAME'), 'UTF-8');
     }
@@ -89,7 +88,7 @@ class AuthModel implements AuthModelInterface
      *
      * @return \Dropbox\WebAuth
      */
-    private function webAuth()
+    public function webAuth()
     {
         $dropboxKey    = getenv('ROOMZ_DROPBOX_KEY');
         $dropboxSecret = getenv('ROOMZ_DROPBOX_SECRET');
@@ -107,7 +106,7 @@ class AuthModel implements AuthModelInterface
      *
      * @return boolean
      */
-    private function checkToken(User $user)
+    public function checkToken($user)
     {
         return !is_null($user->getAttribute('dropboxToken'));
     }
@@ -117,7 +116,7 @@ class AuthModel implements AuthModelInterface
      *
      * @return array
      */
-    public function getClientDetails(User $user)
+    public function getClientDetails($user)
     {
         $valid = $this->checkToken($user);
         if ($valid) {
@@ -128,6 +127,4 @@ class AuthModel implements AuthModelInterface
         }
         return $this->reboot($user);
     }
-
-
 }

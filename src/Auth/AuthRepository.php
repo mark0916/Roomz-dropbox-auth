@@ -1,7 +1,5 @@
 <?php namespace Roomz\Dropbox\Auth;
 
-use App\User;
-
 class AuthRepository implements AuthRepositoryInterface
 {
     //TODO:: add comments!!!!!!
@@ -13,27 +11,57 @@ class AuthRepository implements AuthRepositoryInterface
         $this->model = new AuthModel();
     }
 
-    public function boot(User $user)
+    /**
+     * Initiate oauth process
+     *
+     * @param  Default laravel User
+     * @return array
+     */
+    public function boot($user)
     {
-        $this->model->boot($user);
+        return $this->model->boot($user);
     }
 
-    public function reboot(User $user)
+    /**
+     * reboot oauth process
+     *
+     * @param  Default laravel User
+     * @return array
+     */
+    public function reboot($user)
     {
-        $this->model->reboot($user);
+        return $this->model->reboot($user);
     }
 
-    public function callback(User $user)
+    /**
+     * callback for oauth process
+     *
+     * @param  Default laravel User
+     * @return array
+     */
+    public function callback($user)
     {
         return $this->model->callback($user);
     }
 
-    public function getApiClient(User $user)
+    /**
+     * Getter for the client
+     *
+     * @param  Default laravel User
+     * @return Dropnbox Client
+     */
+    public function getApiClient($user)
     {
         return $this->model->getApiClient($user);
     }
 
-    public function getClientDetails(User $user)
+    /**
+     * get client details array or reboot oauth
+     *
+     * @param  Default laravel User
+     * @return array
+     */
+    public function getClientDetails($user)
     {
         return $this->model->getClientDetails($user);
     }

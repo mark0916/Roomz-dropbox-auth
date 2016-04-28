@@ -25,7 +25,6 @@ class RoomzDropboxServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerAuth();
-        $this->registerClient();
     }
 
     protected function registerAuth()
@@ -36,14 +35,4 @@ class RoomzDropboxServiceProvider extends ServiceProvider
             );
         });
     }
-
-    protected function registerClient()
-    {
-        $this->app->bind('roomz.dropbox.client', function ($app) {
-            return new ClientRepository(
-                $app['events']
-            );
-        });
-    }
-
 }

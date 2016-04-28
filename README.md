@@ -54,7 +54,6 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Roomz\Dropbox\Auth\AuthRepositoryInterface;
-use Roomz\Dropbox\Client\ClientRepositoryInterface;
 use App\User;
 
 class Controller extends BaseController
@@ -62,17 +61,14 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     private $dropbox;
-    private $client;
     private $dummyUser;
 
     public function __construct(
         AuthRepositoryInterface $auth,
-        ClientRepositoryInterface $client
+        User $user
     ) {
         $this->dropbox   = $auth;
-        $this->client    = $client;
-        $this->dummyUser = User::where('name','roomz')->first();
-
+        $this->dummyUser = $user->where('name','roomz')->first();
     }
 
     public function index(){
